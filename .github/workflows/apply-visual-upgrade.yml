@@ -43,6 +43,7 @@ jobs:
           crop_webp .release/rewards.webp 360 90 assets/rewards/wand.webp
           crop_webp .release/rewards.webp 450 90 assets/rewards/gem.webp
 
+          sed -i 's/\r$//' .release/index.patch
           git apply .release/index.patch
           rm -rf .release .github/workflows/apply-visual-upgrade.yml
 
