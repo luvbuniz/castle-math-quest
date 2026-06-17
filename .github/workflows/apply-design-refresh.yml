@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/apply-design-refresh.yml"
+      - ".release/index-design-refresh.patch"
 
 permissions:
   contents: write

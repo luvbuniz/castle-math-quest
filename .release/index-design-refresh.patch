@@ -333,7 +333,7 @@
 +      .avatar-parade { grid-template-columns: repeat(5, minmax(48px, 1fr)); gap: 5px; padding: 6px; }
 +      .parade-avatar { min-height: 64px; border-radius: 14px; }
 +      .parade-avatar .avatar-art { width: 58px; height: 58px; }
-       .map-heading { align-items: flex-start; flex-direction: nol; }
+       .map-heading { align-items: flex-start; flex-direction: column; }
        .map-path { grid-template-columns: repeat(2, 1fr); padding: 22px 12px; }
        .level-node:nth-child(even) { transform: none; }
 @@ -651,15 +842,89 @@
