@@ -1,0 +1,492 @@
+--- a/index.html
++++ b/index.html
+@@ -17,8 +17,9 @@
+       --green: #45a66b;
+       --rose: #ef709d;
+       --blue: #4f8edc;
+-      --card: rgba(255, 255, 255, .94);
+-      --shadow: 0 12px 0 rgba(58, 45, 111, .14), 0 18px 35px rgba(37, 34, 70, .16);
++      --card: rgba(255, 255, 255, .96);
++      --shadow: 0 12px 0 rgba(58, 45, 111, .14), 0 20px 44px rgba(37, 34, 70, .18);
++      --outline: #3d306d;
+     }
+ 
+     * { box-sizing: border-box; }
+@@ -28,7 +29,10 @@
+       min-height: 100vh;
+       color: var(--ink);
+       font-family: "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+-      background: linear-gradient(#91d8ff 0 58%, #8bd177 58% 100%);
++      background:
++        radial-gradient(circle at 16% 14%, rgba(255,255,255,.86) 0 42px, transparent 43px),
++        radial-gradient(circle at 84% 18%, rgba(255,246,181,.8) 0 48px, transparent 49px),
++        linear-gradient(#77cef8 0 56%, #95df83 56% 100%);
+       overflow-x: hidden;
+     }
+     button, input { font: inherit; }
+@@ -44,6 +48,18 @@
+     }
+     button:disabled { cursor: not-allowed; }
+     .app { min-height: 100vh; position: relative; isolation: isolate; }
++    .app::before {
++      content: "";
++      position: fixed;
++      inset: auto 0 0;
++      height: 32vh;
++      z-index: -2;
++      pointer-events: none;
++      background:
++        radial-gradient(ellipse at 18% 88%, #66bd6f 0 30%, transparent 31%),
++        radial-gradient(ellipse at 74% 92%, #55aa64 0 34%, transparent 35%),
++        linear-gradient(180deg, transparent, rgba(46,121,61,.22));
++    }
+     .sky-decor {
+       position: fixed;
+       inset: 0;
+@@ -79,8 +95,11 @@
+       gap: 12px;
+       padding: 10px clamp(12px, 3vw, 30px);
+       color: #fff;
+-      background: rgba(49, 37, 107, .93);
++      background:
++        radial-gradient(circle at 18% 0, rgba(247,201,92,.2), transparent 28%),
++        linear-gradient(90deg, #302265, #4a398f 55%, #34246f);
+       border-bottom: 4px solid var(--gold);
++      box-shadow: 0 8px 24px rgba(37,34,70,.18);
+       position: relative;
+       z-index: 20;
+     }
+@@ -120,7 +139,10 @@
+     @keyframes appear { from { opacity: 0; transform: translateY(12px); } }
+     .panel {
+       width: 100%;
+-      background: var(--card);
++      background:
++        radial-gradient(circle at 16% 0, rgba(255,238,163,.32), transparent 28%),
++        radial-gradient(circle at 88% 12%, rgba(191,232,255,.5), transparent 24%),
++        linear-gradient(180deg, var(--card), #fffaf0);
+       border: 5px solid #fff;
+       border-radius: 32px;
+       padding: clamp(20px, 4vw, 42px);
+@@ -131,7 +153,7 @@
+       content: "";
+       position: absolute;
+       inset: 8px;
+-      border: 2px dashed rgba(95,75,182,.17);
++      border: 2px dashed rgba(95,75,182,.18);
+       border-radius: 21px;
+       pointer-events: none;
+     }
+@@ -142,7 +164,7 @@
+       line-height: .98;
+       margin-bottom: 16px;
+       color: var(--purple-dark);
+-      text-shadow: 0 4px 0 #e5d8ff;
++      text-shadow: 0 4px 0 #e5d8ff, 0 8px 18px rgba(62,49,126,.13);
+     }
+     h2 { font-size: clamp(1.8rem, 5vw, 3rem); color: var(--purple-dark); }
+     h3 { color: var(--purple-dark); }
+@@ -189,9 +211,100 @@
+     .button-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+ 
+     /* Welcome and castle art */
+-    .welcome-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 30px; }
+-    .castle-hero { min-height: 390px; position: relative; display: grid; place-items: end center; }
+-    .castle-svg { width: min(100%, 500px); height: auto; filter: drop-shadow(0 15px 8px rgba(39,38,75,.2)); }
++    .welcome-panel { overflow: hidden; }
++    .welcome-grid {
++      display: grid;
++      grid-template-columns: minmax(0, .9fr) minmax(360px, 1.1fr);
++      align-items: center;
++      gap: clamp(24px, 5vw, 54px);
++    }
++    .welcome-copy { max-width: 510px; }
++    .welcome-copy h1 { font-size: clamp(3rem, 8vw, 5.7rem); }
++    .welcome-actions { margin-top: 24px; }
++    .quest-note {
++      display: inline-flex;
++      align-items: center;
++      gap: 8px;
++      margin-top: 22px;
++      padding: 10px 14px;
++      border-radius: 18px;
++      background: #f2edff;
++      color: #4d4370;
++      font-weight: 900;
++      box-shadow: inset 0 -3px 0 rgba(95,75,182,.13);
++    }
++    .hero-showcase { position: relative; display: grid; gap: 14px; }
++    .hero-showcase::before {
++      content: "";
++      position: absolute;
++      inset: 24px 24px 82px;
++      border-radius: 42px;
++      background: linear-gradient(145deg, rgba(247,201,92,.36), rgba(239,112,157,.16));
++      transform: rotate(-2deg);
++      z-index: -1;
++    }
++    .castle-hero {
++      min-height: 390px;
++      position: relative;
++      display: grid;
++      place-items: end center;
++      padding: 22px 18px 14px;
++      border: 5px solid #fff;
++      border-radius: 34px;
++      background:
++        radial-gradient(circle at 78% 17%, rgba(255,246,168,.92) 0 9%, transparent 10%),
++        radial-gradient(circle at 14% 20%, rgba(255,255,255,.8) 0 8%, transparent 9%),
++        linear-gradient(180deg, #bfeeff 0 55%, #a5e891 55% 100%);
++      box-shadow: inset 0 -10px 0 rgba(79,142,220,.11), 0 10px 0 rgba(62,49,126,.14), 0 18px 32px rgba(37,34,70,.1);
++      overflow: hidden;
++    }
++    .castle-hero::before {
++      content: "";
++      position: absolute;
++      left: -8%;
++      right: -8%;
++      bottom: -25px;
++      height: 118px;
++      border-radius: 50% 50% 0 0;
++      background: linear-gradient(180deg, #8bd177, #58ab66);
++      border-top: 5px solid rgba(255,255,255,.48);
++    }
++    .castle-hero::after {
++      content: "";
++      position: absolute;
++      left: 18%;
++      right: 18%;
++      bottom: -8px;
++      height: 76px;
++      border-radius: 50% 50% 0 0;
++      background: radial-gradient(ellipse at center, rgba(247,201,92,.75), rgba(247,201,92,.25) 52%, transparent 54%);
++      transform: perspective(130px) rotateX(36deg);
++      z-index: 1;
++    }
++    .castle-svg {
++      width: min(100%, 510px);
++      height: auto;
++      position: relative;
++      z-index: 2;
++      filter: drop-shadow(0 12px 0 rgba(58,45,111,.18)) drop-shadow(0 22px 22px rgba(39,38,75,.18));
++    }
++    .scene-token {
++      position: absolute;
++      z-index: 3;
++      min-width: 54px;
++      padding: 8px 11px;
++      border-radius: 18px;
++      color: #3e317e;
++      background: rgba(255,255,255,.86);
++      border: 3px solid #fff;
++      box-shadow: 0 5px 0 rgba(62,49,126,.16);
++      font-weight: 900;
++      text-align: center;
++    }
++    .scene-token.t1 { left: 8%; top: 18%; transform: rotate(-8deg); background: #fff4c9; }
++    .scene-token.t2 { right: 9%; top: 30%; transform: rotate(7deg); background: #f0ebff; }
++    .scene-token.t3 { left: 13%; bottom: 25%; transform: rotate(6deg); background: #dcf7e4; }
++    .scene-token.t4 { right: 15%; bottom: 19%; transform: rotate(-6deg); background: #ffe6ef; }
+     .torch-flame { transform-origin: center bottom; animation: flicker .48s ease-in-out infinite alternate; }
+     @keyframes flicker { to { transform: scale(.85,1.15) rotate(3deg); opacity: .82; } }
+     .sparkle {
+@@ -204,28 +317,89 @@
+     .sparkle.s2 { top: 29%; right: 9%; animation-delay: -.7s; }
+     .sparkle.s3 { top: 4%; right: 35%; animation-delay: -1.2s; }
+     @keyframes twinkle { 50% { transform: scale(.45) rotate(35deg); opacity: .35; } }
++    .avatar-parade {
++      display: grid;
++      grid-template-columns: repeat(5, 1fr);
++      gap: 10px;
++      padding: 10px;
++      border-radius: 26px;
++      background: rgba(255,255,255,.76);
++      border: 4px solid #fff;
++      box-shadow: 0 8px 0 rgba(62,49,126,.12);
++    }
++    .parade-avatar {
++      min-height: 98px;
++      display: grid;
++      place-items: center;
++      border-radius: 20px;
++      background: var(--avatar-bg, #f5efff);
++      box-shadow: inset 0 -5px 0 rgba(62,49,126,.1);
++    }
++    .parade-avatar .avatar-art { width: 92px; height: 92px; }
++    .quest-pill {
++      justify-self: center;
++      margin-top: -4px;
++      padding: 10px 16px;
++      border-radius: 999px;
++      color: #33265e;
++      background: linear-gradient(#fff5c6, #f7c95c);
++      border: 3px solid #fff;
++      box-shadow: 0 6px 0 #b78118;
++      font-weight: 900;
++    }
+ 
+     /* Avatar selection and reusable avatar art */
+-    .avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin: 25px 0; }
++    .avatar-picker-panel { overflow: hidden; }
++    .avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin: 25px 0; }
+     .avatar-card {
+-      min-height: 210px;
+-      padding: 12px;
+-      border-radius: 23px;
+-      background: #f6f0ff;
+-      border: 4px solid transparent;
+-      box-shadow: 0 6px 0 #d8cced;
++      min-height: 254px;
++      padding: 12px 12px 16px;
++      border-radius: 26px;
++      background:
++        radial-gradient(circle at 50% 22%, rgba(255,255,255,.78), transparent 34%),
++        linear-gradient(180deg, var(--avatar-bg, #f6f0ff), #fff);
++      border: 4px solid rgba(255,255,255,.85);
++      box-shadow: 0 8px 0 var(--avatar-shadow, #d8cced), 0 14px 26px rgba(62,49,126,.12);
+       display: flex;
+       flex-direction: column;
+       justify-content: space-between;
+       align-items: center;
+       gap: 8px;
+       font-weight: 900;
+-    }
+-    .avatar-card:hover { transform: translateY(-4px); }
+-    .avatar-card.selected { border-color: var(--gold); background: #fff9dc; box-shadow: 0 7px 0 #ba8d27; }
++      position: relative;
++      overflow: hidden;
++      transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
++    }
++    .avatar-card::before {
++      content: "";
++      position: absolute;
++      width: 118px;
++      height: 118px;
++      border-radius: 50%;
++      left: 50%;
++      top: 34%;
++      transform: translate(-50%, -50%);
++      background: rgba(255,255,255,.55);
++      box-shadow: 0 0 0 16px rgba(255,255,255,.18);
++    }
++    .avatar-card[data-avatar="fox"], .parade-avatar[data-avatar="fox"] { --avatar-bg: #fff0d9; --avatar-shadow: #e9b76f; }
++    .avatar-card[data-avatar="owl"], .parade-avatar[data-avatar="owl"] { --avatar-bg: #f0e5ff; --avatar-shadow: #c4a7e5; }
++    .avatar-card[data-avatar="bunny"], .parade-avatar[data-avatar="bunny"] { --avatar-bg: #e9f8dc; --avatar-shadow: #add784; }
++    .avatar-card[data-avatar="dragon"], .parade-avatar[data-avatar="dragon"] { --avatar-bg: #daf8e4; --avatar-shadow: #89cf9d; }
++    .avatar-card[data-avatar="cat"], .parade-avatar[data-avatar="cat"] { --avatar-bg: #eee7ff; --avatar-shadow: #c2afe7; }
++    .avatar-card:hover { transform: translateY(-5px); filter: saturate(1.05); }
++    .avatar-card.selected { border-color: var(--gold); background: #fff9dc; box-shadow: 0 8px 0 #ba8d27, 0 16px 30px rgba(183,129,24,.2); }
++    .avatar-stage {
++      width: 100%;
++      min-height: 170px;
++      display: grid;
++      place-items: center;
++      position: relative;
++      z-index: 1;
++    }
+     .avatar-art {
+-      width: 138px;
+-      height: 138px;
++      width: 154px;
++      height: 154px;
+       max-width: 100%;
+       display: block;
+       object-fit: contain;
+@@ -233,7 +407,18 @@
+       animation: hero-float 2.4s ease-in-out infinite alternate;
+     }
+     @keyframes hero-float { to { transform: translateY(-5px) rotate(1deg); } }
+-    .avatar-label { text-transform: capitalize; line-height: 1.15; }
++    .avatar-label {
++      width: 100%;
++      position: relative;
++      z-index: 1;
++      text-transform: capitalize;
++      line-height: 1.15;
++      padding: 10px 8px;
++      border-radius: 16px;
++      background: rgba(255,255,255,.78);
++      color: #2f2951;
++      box-shadow: inset 0 -3px 0 rgba(62,49,126,.1);
++    }
+ 
+     /* Castle map */
+     .map-screen { align-items: flex-start; }
+@@ -476,7 +661,8 @@
+     @media (max-width: 850px) {
+       .welcome-grid { grid-template-columns: 1fr; text-align: center; }
+       .welcome-grid .button-row { justify-content: center; }
+-      .castle-hero { min-height: 280px; }
++      .welcome-copy { margin: 0 auto; }
++      .castle-hero { min-height: 290px; }
+       .avatar-grid { grid-template-columns: repeat(3, 1fr); }
+       .map-path { grid-template-columns: repeat(3, 1fr); }
+       .closet-grid { grid-template-columns: repeat(3, 1fr); }
+@@ -489,7 +675,12 @@
+       .screen { padding: 14px; }
+       .panel { padding: 22px 16px; border-radius: 24px; }
+       .avatar-grid { grid-template-columns: repeat(2, 1fr); }
+-      .avatar-card { min-height: 180px; }
++      .avatar-card { min-height: 220px; }
++      .avatar-stage { min-height: 135px; }
++      .avatar-card .avatar-art { width: 128px; height: 128px; }
++      .avatar-parade { grid-template-columns: repeat(5, minmax(48px, 1fr)); gap: 5px; padding: 6px; }
++      .parade-avatar { min-height: 64px; border-radius: 14px; }
++      .parade-avatar .avatar-art { width: 58px; height: 58px; }
+       .map-heading { align-items: flex-start; flex-direction: nol; }
+       .map-path { grid-template-columns: repeat(2, 1fr); padding: 22px 12px; }
+       .level-node:nth-child(even) { transform: none; }
+@@ -651,15 +842,89 @@
+ 
+     function castleSvg() {
+       return `
+-        <svg class="castle-svg" viewBox="0 0 520 420" role="img" aria-label="A cheerful purple castle">
+-          <ellipse cx="260" cy="395" rx="230" ry="24" fill="rgba(55,90,58,.25)"/>
+-          <path d="M76 349V167h84v54h54V125h92v96h54v-54h84v182z" fill="#8a76d0" stroke="#47387c" stroke-width="8"/>
+-          <path d="M64 168h108l-14-40-19 18-22-22-22 22-19-18zM348 168h108l-14-40-19 18-22-22-22 22-19-18zM201 126h118l-13-42-23 19-23-26-23 26-23-19z" fill="#6550ad" stroke="#47387c" stroke-width="7"/>
+-          <path d="M224 349v-71q36-45 72 0v71z" fill="#3c306d"/><path d="M239 349v-65q21-28 42 0v65z" fill="#f1c45d"/>
+-          <g fill="#bfe8ff" stroke="#47387c" stroke-width="6"><path d="M99 210q18-24 36 0v39H99z"/><path d="M385 210q18-24 36 0v39h-36z"/><path d="M241 167q19-27 38 0v43h-38z"/></g>
+-          <g><path d="M170 260h15v72h-15z" fill="#70482d"/><path class="torch-flame" d="M177 265q-24-23 1-48 22 27 2 49z" fill="#ffb02e"/><path class="torch-flame" d="M177 258q-11-13 1-27 10 14 1 27z" fill="#fff28d"/></g>
+-          <g><path d="M335 260h15v72h-15z" fill="#70482d"/><path class="torch-flame" d="M342 265q-24-23 1-48 22 27 2 49z" fill="#ffb02e"/><path class="torch-flame" d="M342 258q-11-13 1-27 10 14 1 27z" fill="#fff28d"/></g>
+-          <path d="M260 76V24l67 21-67 20" fill="#ef709d" stroke="#47387c" stroke-width="6"/><path d="M260 23v62" stroke="#47387c" stroke-width="7"/>
++        <svg class="castle-svg" viewBox="0 0 560 430" role="img" aria-label="A whimsical cartoon purple castle scene">
++          <defs>
++            <linearGradient id="castleWall" x1="0" x2="0" y1="0" y2="1">
++              <stop offset="0" stop-color="#9f8ae8"/>
++              <stop offset=".58" stop-color="#8068cf"/>
++              <stop offset="1" stop-color="#6d56bb"/>
++            </linearGradient>
++            <linearGradient id="towerShade" x1="0" x2="1">
++              <stop offset="0" stop-color="#b5a5f1"/>
++              <stop offset=".72" stop-color="#826bd2"/>
++            </linearGradient>
++            <linearGradient id="roofGrad" x1="0" x2="0" y1="0" y2="1">
++              <stop offset="0" stop-color="#765dca"/>
++              <stop offset="1" stop-color="#493982"/>
++            </linearGradient>
++          </defs>
++          <ellipse cx="281" cy="389" rx="238" ry="26" fill="rgba(61,48,109,.2)"/>
++          <path d="M83 350c43-34 98-48 165-35 87 16 139-28 229-3 32 9 54 24 70 38v50H83z" fill="#5eb66f" opacity=".72"/>
++          <path d="M75 373c75-33 145-42 209-27 67 16 129 5 201-23" fill="none" stroke="#bdf0a7" stroke-width="8" stroke-linecap="round" opacity=".72"/>
++
++          <g stroke="#3d306d" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
++            <path d="M85 343V180c0-20 16-36 36-36h51c20 0 36 16 36 36v163z" fill="url(#towerShade)"/>
++            <path d="M352 343V180c0-20 16-36 36-36h51c20 0 36 16 36 36v163z" fill="url(#towerShade)"/>
++            <path d="M190 343V128c0-25 20-45 45-45h91c25 0 45 20 45 45v215z" fill="url(#castleWall)"/>
++            <path d="M150 343V233c0-17 14-31 31-31h198c17 0 31 14 31 31v110z" fill="#8a76d8"/>
++
++            <path d="M65 164h164l-18-50-28 24-31-34-31 34-28-24z" fill="url(#roofGrad)"/>
++            <path d="M331 164h164l-18-50-28 24-31-34-31 34-28-24z" fill="url(#roofGrad)"/>
++            <path d="M177 102h206l-20-56-37 31-45-46-45 46-37-31z" fill="url(#roofGrad)"/>
++          </g>
++
++          <g fill="rgba(255,255,255,.22)">
++            <circle cx="128" cy="190" r="9"/><circle cx="171" cy="222" r="7"/><circle cx="386" cy="198" r="8"/><circle cx="441" cy="232" r="7"/>
++            <circle cx="231" cy="133" r="8"/><circle cx="304" cy="153" r="7"/><circle cx="343" cy="252" r="9"/><circle cx="204" cy="264" r="7"/>
++          </g>
++
++          <g stroke="#3d306d" stroke-width="6" stroke-linejoin="round">
++            <path d="M112 223q34-43 68 0v54h-68z" fill="#c9efff"/>
++            <path d="M380 223q34-43 68 0v54h-68z" fill="#c9efff"/>
++            <path d="M245 147q35-46 70 0v62h-70z" fill="#c9efff"/>
++            <path d="M232 343v-76q49-62 98 0v76z" fill="#3d306d"/>
++            <path d="M249 343v-68q31-39 62 0v68z" fill="#f7c95c"/>
++            <path d="M280 279v64" stroke="#d69a28" stroke-width="4"/>
++          </g>
++
++          <g stroke="#3d306d" stroke-width="5" stroke-linejoin="round">
++            <path d="M123 149v-25h49v25M388 149v-25h49v25M229 89V61h102v28" fill="#b9aaf1"/>
++            <path d="M222 128h116" stroke="#c6b8ff" opacity=".6"/>
++            <path d="M203 229h154" stroke="#c6b8ff" opacity=".55"/>
++          </g>
++
++          <g>
++            <path d="M168 280h15v56h-15z" fill="#70482d"/>
++            <path class="torch-flame" d="M176 284q-22-22 1-47 22 27 1 47z" fill="#ffb02e"/>
++            <path class="torch-flame" d="M176 275q-10-13 1-27 10 14 0 27z" fill="#fff28d"/>
++            <path d="M377 280h15v56h-15z" fill="#70482d"/>
++            <path class="torch-flame" d="M385 284q-22-22 1-47 22 27 1 47z" fill="#ffb02e"/>
++            <path class="torch-flame" d="M385 275q-10-13 1-27 10 14 0 27z" fill="#fff28d"/>
++          </g>
++
++          <g stroke="#3d306d" stroke-width="6" stroke-linejoin="round">
++            <path d="M280 50V17l72 22-72 23" fill="#ef709d"/>
++            <path d="M280 16v63" stroke-linecap="round"/>
++            <path d="M151 119V91l48 16-48 16" fill="#f7c95c"/>
++            <path d="M151 90v42" stroke-linecap="round"/>
++            <path d="M410 119V91l48 16-48 16" fill="#f7c95c"/>
++            <path d="M410 90v42" stroke-linecap="round"/>
++          </g>
++
++          <g>
++            <path d="M43 337q22-45 45 0z" fill="#4b9f61" stroke="#2e7140" stroke-width="5"/>
++            <path d="M34 358h61" stroke="#2e7140" stroke-width="8" stroke-linecap="round"/>
++            <path d="M492 337q22-45 45 0z" fill="#4b9f61" stroke="#2e7140" stroke-width="5"/>
++            <path d="M483 358h61" stroke="#2e7140" stroke-width="8" stroke-linecap="round"/>
++            <circle cx="54" cy="302" r="22" fill="#63bf71" stroke="#2e7140" stroke-width="5"/>
++            <circle cx="512" cy="304" r="24" fill="#63bf71" stroke="#2e7140" stroke-width="5"/>
++          </g>
++
++          <g fill="#fff6a8" opacity=".95">
++            <path d="M66 88 74 105 91 112 74 119 66 136 58 119 41 112 58 105z"/>
++            <path d="M476 70 482 84 496 90 482 96 476 110 470 96 456 90 470 84z"/>
++            <path d="M506 184 511 195 522 200 511 205 506 216 501 205 490 200 501 195z"/>
++          </g>
+         </svg>`;
+     }
+ 
+@@ -1161,20 +1426,30 @@
+     function renderWelcome() {
+       game.innerHTML = `
+         <section class="screen">
+-          <div class="panel"><div class="content-layer welcome-grid">
+-            <div>
++          <div class="panel welcome-panel"><div class="content-layer welcome-grid">
++            <div class="welcome-copy">
+               <p class="eyebrow">A brave learning adventure</p>
+               <h1>Castle Math Quest</h1>
+               <p class="lead">Choose a hero, explore a magical kingdom, and grow your math powers one friendly challenge at a time.</p>
+-              <div class="button-row">
++              <div class="button-row welcome-actions">
+                 <button class="primary" type="button" data-action="start">Begin Your Adventure</button>
+                 <button class="secondary" type="button" data-action="replay">🔊 Hear Welcome</button>
+               </div>
+-              <p style="margin-top:24px;font-weight:800;color:#5b5572">No timers. No lost points. Just practice, hints, and celebration!</p>
++              <div class="quest-note">✨ No timers. No lost points. Practice, hints, and celebration.</div>
+             </div>
+-            <div class="castle-hero" aria-hidden="true">
+-              <span class="sparkle s1">✦</span><span class="sparkle s2">✦</span><span class="sparkle s3">✦</span>
+-              ${castleSvg()}
++            <div class="hero-showcase" aria-hidden="true">
++              <div class="castle-hero">
++                <span class="sparkle s1">✦</span><span class="sparkle s2">✦</span><span class="sparkle s3">✦</span>
++                <span class="scene-token t1">2 + 3</span>
++                <span class="scene-token t2">10¢</span>
++                <span class="scene-token t3">1/2</span>
++                <span class="scene-token t4">4s</span>
++                ${castleSvg()}
++              </div>
++              <div class="avatar-parade">
++                ${AVATARS.map(avatar => `<div class="parade-avatar" data-avatar="${avatar.id}">${avatarArt(avatar.id)}</div>`).join("")}
++              </div>
++              <div class="quest-pill">10 friendly math quests</div>
+             </div>
+           </div></div>
+         </section>`;
+@@ -1183,14 +1458,14 @@
+     function renderAvatars() {
+       game.innerHTML = `
+         <section class="screen">
+-          <div class="panel"><div class="content-layer">
++          <div class="panel avatar-picker-panel"><div class="content-layer">
+             <p class="eyebrow">The royal quest needs a hero</p>
+             <h2>Choose Your Adventurer</h2>
+             <p class="lead">Every hero has the same mighty math powers. Pick the friend you like best!</p>
+             <div class="avatar-grid">
+               ${AVATARS.map(avatar => `
+                 <button type="button" class="avatar-card ${state.avatar === avatar.id ? "selected" : ""}" data-avatar="${avatar.id}" aria-pressed="${state.avatar === avatar.id}">
+-                  ${avatarArt(avatar.id)}
++                  <span class="avatar-stage">${avatarArt(avatar.id)}</span>
+                   <span class="avatar-label">${avatar.name}</span>
+                 </button>`).join("")}
+             </div>
